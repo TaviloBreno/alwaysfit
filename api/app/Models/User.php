@@ -42,4 +42,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function trainings()
+    {
+        return $this->hasMany(Training::class);
+    }
+
+    public function nutritionPlans()
+    {
+        return $this->hasMany(NutritionPlan::class);
+    }
+
+    public function progressLogs()
+    {
+        return $this->hasMany(ProgressLog::class);
+    }
 }
