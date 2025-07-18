@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\NutritionPlanController;
+use App\Http\Controllers\ProgressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('trainings', TrainingController::class);
 
     Route::apiResource('nutrition-plans', NutritionPlanController::class);
+
+    Route::get('/progress', [ProgressController::class, 'index']);
 });
