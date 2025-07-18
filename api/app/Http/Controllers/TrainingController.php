@@ -44,9 +44,9 @@ class TrainingController extends Controller
      */
     public function show(Training $training)
     {
-        if ($training->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorize('view', $training);
+        $this->authorize('update', $training);
+        $this->authorize('delete', $training);
 
         return response()->json($training);
     }
@@ -56,10 +56,8 @@ class TrainingController extends Controller
      */
     public function update(UpdateTrainingRequest $request, Training $training)
     {
-        $this->authorizeOwner($training);
-
+        $this->authorize('update', $training);
         $training->update($request->validated());
-
         return response()->json($training);
     }
 
@@ -68,10 +66,8 @@ class TrainingController extends Controller
      */
     public function destroy(Training $training)
     {
-        $this->authorizeOwner($training);
-
+        $this->authorize('delete', $training);
         $training->delete();
-
         return response()->json(['message' => 'Training deleted successfully.']);
     }
 }
