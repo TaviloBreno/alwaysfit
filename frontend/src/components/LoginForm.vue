@@ -27,74 +27,80 @@
                 :errorMessage="passwordError"
             />
 
-            <BaseButton type="submit" :disabled="isSubmitting || !isFormValid">
-                {{ isSubmitting ? 'Entrando...' : 'Logar' }}
+            <p v-if="authErrorMessage" class="login-form__api-error">{{ authErrorMessage }}</p>
+
+            <BaseButton type="submit" :disabled="isLoading || !isFormValid">
+                {{ isLoading ? 'Entrando...' : 'Logar' }}
             </BaseButton>
         </form>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 
-// Estado do formulário
+const store = useStore();
+const router = useRouter();
+
 const email = ref('');
 const password = ref('');
-const isSubmitting = ref(false);
 
 const emailError = ref('');
 const passwordError = ref('');
+
+const authErrorMessage = computed(() => store.getters.authError);
+const isLoading = computed(() => store.getters.isLoading);
 
 const isFormValid = computed(() => {
     return email.value.trim() !== '' && password.value.trim() !== '' && !emailError.value && !passwordError.value;
 });
 
 const validateEmail = () => {
-    if (!email.value.includes('@') || !email.value.includes('.')) {
+    if (email.value.trim() === '') {
+        emailError.value = 'O e-mail é obrigatório.';
+    } else if (!email.value.includes('@') || !email.value.includes('.')) {
         emailError.value = 'E-mail inválido.';
     } else {
         emailError.value = '';
     }
 };
 
-
-watch(email, validateEmail); 
-watch(password, (newVal) => {
-    if (newVal.length < 6 && newVal.length > 0) {
+const validatePassword = () => {
+    if (password.value.trim() === '') {
+        passwordError.value = 'A senha é obrigatória.';
+    } else if (password.value.length < 6) {
         passwordError.value = 'A senha deve ter no mínimo 6 caracteres.';
     } else {
         passwordError.value = '';
     }
-});
+};
 
+watch(email, validateEmail);
+watch(password, validatePassword);
 
 const handleSubmit = async () => {
-    validateEmail(); 
-    if (password.value.length < 6) { // Valida a senha antes de enviar
-         passwordError.value = 'A senha deve ter no mínimo 6 caracteres.';
-    }
+    validateEmail();
+    validatePassword();
 
     if (!isFormValid.value) {
         console.warn('Formulário inválido, corrija os erros.');
         return;
     }
 
-    isSubmitting.value = true;
-    try {
-        console.log('Tentando logar com:', { email: email.value, password: password.value });
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simula requisição
-        console.log('Login bem-sucedido!');
-    } catch (error) {
-        console.error('Erro no login:', error);
-    } finally {
-        isSubmitting.value = false;
+    const success = await store.dispatch('login', {
+        email: email.value,
+        password: password.value,
+    });
+
+    if (success) {
+        router.push('/profile');
     }
 };
-
-
-import { watch } from 'vue';
 </script>
 
 <style lang="scss" scoped>
@@ -151,6 +157,14 @@ import { watch } from 'vue';
         .base-button {
             margin-top: 15px;
         }
+    }
+
+    &__api-error {
+        color: #e74c3c;
+        font-size: 0.9em;
+        margin-top: -5px;
+        margin-bottom: 15px;
+        text-align: left;
     }
 }
 </style>

@@ -52,11 +52,11 @@ defineEmits(['update:modelValue']);
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/global.scss'; // Importa variáveis globais
+;
+@import '@/assets/styles/global.scss';
 
 .base-input {
-    margin-bottom: 15px; // Espaçamento entre inputs
-
+    margin-bottom: 15px;
     &__label {
         display: block;
         font-size: 0.9em;

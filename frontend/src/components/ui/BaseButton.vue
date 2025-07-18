@@ -16,7 +16,7 @@ import { defineProps, defineEmits } from 'vue';
 defineProps({
     type: {
         type: String,
-        default: 'button', // button, submit, reset
+        default: 'button',
     },
     disabled: {
         type: Boolean,
@@ -28,7 +28,7 @@ defineEmits(['click']);
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/global.scss'; // Importa variáveis globais
+@import '@/assets/styles/global.scss';
 
 .base-button {
     width: 100%;
@@ -39,8 +39,8 @@ defineEmits(['click']);
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    background-color: $secondary-color; // Cor de fundo do botão do design
-    color: white; // Cor do texto
+    background-color: $secondary-color; 
+    color: white; 
 
     &:hover {
         background-color: darken($secondary-color, 10%);
