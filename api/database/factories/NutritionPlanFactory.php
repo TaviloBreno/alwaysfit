@@ -1,0 +1,24 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\NutritionPlan>
+ */
+class NutritionPlanFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'meal_type' => $this->faker->randomElement(['breakfast', 'lunch', 'dinner', 'snack']),
+            'description' => $this->faker->sentence,
+        ];
+    }
+}
