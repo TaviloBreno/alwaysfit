@@ -19,7 +19,7 @@ class TrainingController extends Controller
     public function index(Request $request)
     {
         $query = Training::where('user_id', $request->user()->id);
-        if($request->has('level')){
+        if ($request->has('level')) {
             $query->where('level', $request->level);
         }
 
@@ -44,7 +44,9 @@ class TrainingController extends Controller
      */
     public function show(Training $training)
     {
-        $this->authorizeOwner($training);
+        if ($training->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
 
         return response()->json($training);
     }
