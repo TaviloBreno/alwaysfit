@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrainingController;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\NutritionPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
 
     Route::apiResource('trainings', TrainingController::class);
+
+    Route::apiResource('nutrition-plans', NutritionPlanController::class);
 });
